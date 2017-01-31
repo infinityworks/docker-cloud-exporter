@@ -49,8 +49,9 @@ func (e *Exporter) gatherServiceMetrics(ch chan<- prometheus.Metric) (*dockerclo
 
 	for _, x := range service.Objects {
 
-		e.gaugeVecs["serviceState"].With(prometheus.Labels{"service_name": x.Name, "state": x.State}).Set(1)
-		e.gaugeVecs["serviceCreatedDate"].With(prometheus.Labels{"service_name": x.Name, "state": x.State}).Set(c.ConvertTime(x.Deployed_datetime))
+		e.gaugeVecs["serviceState"].With(prometheus.Labels{"service_name": x.Name, "stack_name": x.Stack, "state": x.State}).Set(1)
+		e.gaugeVecs["serviceCreatedDate"].With(prometheus.Labels{"service_name": x.Name, "stack_name": x.Stack, "state": x.State}).Set(c.ConvertTime(x.Deployed_datetime))
+
 	}
 
 	return Service, err

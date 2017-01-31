@@ -26,13 +26,13 @@ func AddMetrics() map[string]*prometheus.GaugeVec {
 			Namespace: "docker_cloud",
 			Name:      "service_state",
 			Help:      "State of defined service as reported by the Docker Cloud API",
-		}, []string{"service_name", "state"})
+		}, []string{"service_name", "stack_name", "state"})
 	gaugeVecs["serviceCreatedDate"] = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Namespace: "docker_cloud",
 			Name:      "service_created_date",
 			Help:      "Date & time the service was created in Unix seconds",
-		}, []string{"service_name", "state"})
+		}, []string{"service_name", "stack_name". "state"})
 
 	// node metrics
 	gaugeVecs["nodeState"] = prometheus.NewGaugeVec(
