@@ -31,7 +31,6 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	defer e.mutex.Unlock()
 
 	e.resetMetrics() // Clean starting point
-
 	e.gatherStackMetrics(ch)
 	e.gatherServiceMetrics(ch)
 	e.gatherNodeMetrics(ch)

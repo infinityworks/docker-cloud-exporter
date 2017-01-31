@@ -27,7 +27,7 @@ func (e *Exporter) gatherStackMetrics(ch chan<- prometheus.Metric) (*dockercloud
 	for _, x := range stack.Objects {
 
 		e.gaugeVecs["stacksState"].With(prometheus.Labels{"stack_name": x.Name, "state": x.State}).Set(1)
-		e.gaugeVecs["stackCreatedDate"].With(prometheus.Labels{"stack_name": x.Name, "state": x.State}).Set(c.ConvertTime(x.Deployed_datetime))
+		e.gaugeVecs["stackDeployedDate"].With(prometheus.Labels{"stack_name": x.Name}).Set(c.ConvertTime(x.Deployed_datetime))
 	}
 
 	return Stack, err
@@ -47,11 +47,25 @@ func (e *Exporter) gatherServiceMetrics(ch chan<- prometheus.Metric) (*dockerclo
 
 	log.Debugf("Data Captured", service)
 
+	stack, err := dockercloud.ListStacks()
+	if err != nil {
+		log.Println(err)
+	}
+
 	for _, x := range service.Objects {
 
-		e.gaugeVecs["serviceState"].With(prometheus.Labels{"service_name": x.Name, "stack_name": x.Stack, "state": x.State}).Set(1)
-		e.gaugeVecs["serviceCreatedDate"].With(prometheus.Labels{"service_name": x.Name, "stack_name": x.Stack, "state": x.State}).Set(c.ConvertTime(x.Deployed_datetime))
+		var stackName = ""
+		for _, y := range stack.Objects {
+			if y.Resource_uri == x.Stack {
+				stackName = y.Name
+			}
+		}
 
+		e.gaugeVecs["serviceState"].With(prometheus.Labels{"service_name": x.Name, "stack_name": stackName, "state": x.State}).Set(1)
+		e.gaugeVecs["serviceDeployedDate"].With(prometheus.Labels{"service_name": x.Name, "stack_name": stackName}).Set(c.ConvertTime(x.Deployed_datetime))
+		e.gaugeVecs["serviceContainersRunning"].With(prometheus.Labels{"service_name": x.Name, "stack_name": stackName}).Set(float64(x.Current_num_containers))
+		e.gaugeVecs["serviceContainersTarget"].With(prometheus.Labels{"service_name": x.Name, "stack_name": stackName}).Set(float64(x.Target_num_containers))
+		e.gaugeVecs["serviceContainersStopped"].With(prometheus.Labels{"service_name": x.Name, "stack_name": stackName}).Set(float64(x.Stopped_num_containers))
 	}
 
 	return Service, err
@@ -71,8 +85,21 @@ func (e *Exporter) gatherNodeMetrics(ch chan<- prometheus.Metric) (*dockercloud.
 
 	log.Debugf("Data Captured", node)
 
+	nodeCluster, err := dockercloud.ListNodeClusters()
+	if err != nil {
+		log.Println(err)
+	}
+
 	for _, x := range node.Objects {
-		e.gaugeVecs["nodeState"].With(prometheus.Labels{"node_uuid": x.Uuid, "state": x.State}).Set(1)
+
+		var nodeClusterName = ""
+		for _, y := range nodeCluster.Objects {
+			if y.Resource_uri == x.Node_cluster {
+				nodeClusterName = y.Name
+			}
+		}
+
+		e.gaugeVecs["nodeState"].With(prometheus.Labels{"node_uuid": x.Uuid, "availability_zone": x.Availability_zone, "region": x.Region, "node_cluster_name": nodeClusterName, "docker_version": x.Docker_version, "state": x.State}).Set(1)
 	}
 
 	return Node, err
@@ -94,6 +121,8 @@ func (e *Exporter) gatherNodeClusterMetrics(ch chan<- prometheus.Metric) (*docke
 
 	for _, x := range nodeCluster.Objects {
 		e.gaugeVecs["nodeClusterState"].With(prometheus.Labels{"node_cluster_name": x.Name, "state": x.State}).Set(1)
+		e.gaugeVecs["nodeClusterNodesCurrent"].With(prometheus.Labels{"node_cluster_name": x.Name}).Set(float64(x.Current_num_nodes))
+		e.gaugeVecs["nodeClusterNodesTarget"].With(prometheus.Labels{"node_cluster_name": x.Name}).Set(float64(x.Target_num_nodes))
 	}
 
 	return NodeCluster, err
