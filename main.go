@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
-	c "github.com/infinityworksltd/docker-cloud-exporter/config"
-	m "github.com/infinityworksltd/docker-cloud-exporter/measure"
+	c "github.com/infinityworks/docker-cloud-exporter/config"
+	m "github.com/infinityworks/docker-cloud-exporter/measure"
 
 	"github.com/prometheus/client_golang/prometheus"
 )

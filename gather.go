@@ -6,8 +6,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 
 	"github.com/docker/go-dockercloud/dockercloud"
-	c "github.com/infinityworksltd/docker-cloud-exporter/config"
-	m "github.com/infinityworksltd/docker-cloud-exporter/measure"
+	c "github.com/infinityworks/docker-cloud-exporter/config"
+	m "github.com/infinityworks/docker-cloud-exporter/measure"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

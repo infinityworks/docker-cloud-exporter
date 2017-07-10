@@ -53,5 +53,5 @@ An example printout of the metrics you should expect to see can be found in `MET
 
 ## Metadata
 [![](https://images.microbadger.com/badges/version/infinityworks/docker-cloud-exporter.svg)](http://microbadger.com/images/infinityworks/docker-cloud-exporter "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/infinityworks/docker-cloud-exporter.svg)](http://microbadger.com/images/infinityworks/docker-cloud-exporter "Get your own image badge on microbadger.com")
-[![Go Report Card](https://goreportcard.com/badge/github.com/infinityworksltd/docker-cloud-exporter)](https://goreportcard.com/report/github.com/infinityworksltd/docker-cloud-exporter)
-[![GoDoc](https://godoc.org/github.com/infinityworksltd/docker-cloud-exporter?status.svg)](https://godoc.org/github.com/infinityworksltd/docker-cloud-exporter)
+[![Go Report Card](https://goreportcard.com/badge/github.com/infinityworks/docker-cloud-exporter)](https://goreportcard.com/report/github.com/infinityworks/docker-cloud-exporter)
+[![GoDoc](https://godoc.org/github.com/infinityworks/docker-cloud-exporter?status.svg)](https://godoc.org/github.com/infinityworks/docker-cloud-exporter)
